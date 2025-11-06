@@ -5,7 +5,18 @@ const nodemailer = require('nodemailer')
 // To Do: Return error if user enters an invalid URL. If the function returns an error, display an error on the website
 async function priceFind(url){
     try{
-    const browser = await puppeteer.launch({headless:true}); // Start the browser 
+    const browser = await puppeteer.launch({
+        args:[
+            "--disable-setuid-sandbox",
+            "--no-sandbox",
+            "--single-process",
+            "--no-zygote",
+        ],
+        executablePath: 
+            process.env.NODE_ENV === 'production'
+            ? process.env.PUPPETEER_EXECUTABLE_PATH
+            : puppeteer.executablePath
+    }); 
     const page = await browser.newPage();
     await page.goto(url);
     const priceTag = await page.evaluate(() => { // PriceTag stores the latest price of the item
