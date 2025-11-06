@@ -6,16 +6,11 @@ const nodemailer = require('nodemailer')
 async function priceFind(url){
     try{
     const browser = await puppeteer.launch({
-        args:[
-            "--disable-setuid-sandbox",
-            "--no-sandbox",
-            "--single-process",
-            "--no-zygote",
-        ],
-        executablePath: 
-            process.env.NODE_ENV === 'production'
-            ? process.env.PUPPETEER_EXECUTABLE_PATH
-            : puppeteer.executablePath
+        headless:true,
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ]
     }); 
     const page = await browser.newPage();
     await page.goto(url);
