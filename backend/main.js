@@ -35,6 +35,9 @@ async function priceFind(url){
         console.log("Error getting the price", error)
     }
 }
+
+priceFind("https://www.uniqlo.com/us/en/products/E478286-000/00?colorDisplayCode=69")
+
 // Shuts down the browser
 process.on('exit', async () => { if (browser) await browser.close(); });
 process.on('SIGINT', async () => { if (browser) await browser.close(); });
