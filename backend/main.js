@@ -2,38 +2,50 @@ require("dotenv").config();
 const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer')
 
-// To Do: Return error if user enters an invalid URL. If the function returns an error, display an error on the website
-
 let browser;
-
 // Allow the browser to be reused
 async function getBrowser() {
   if (!browser) {
     browser = await puppeteer.launch({
-        headless: true,
-        args: ['--no-sandbox',
-                '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',
-            ], 
+      headless: true,
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+      ],
     });
   }
   return browser;
 }
 
-async function priceFind(url){
-    try{
-        const browser = await getBrowser()
-        const page = await browser.newPage();
-        await page.goto(url);
-        const priceTag = await page.evaluate(() => { // PriceTag stores the latest price of the item
-            const price = document.querySelector(".fr-ec-price").textContent.replace("$", ""); // Price is stored in .fr-ec-price, extracts the price then cleans it up
-            return parseFloat(price); // Convert price to float
-        });
-        await page.close(); // Close the page instead of the browser
-        return priceTag        
-    } catch(error){
-        console.log("Error getting the price", error)
+async function priceFind(url) {
+  try {
+    const browser = await getBrowser();
+    const page = await browser.newPage();
+
+    await page.goto(url, { waitUntil: "networkidle2", timeout: 30000 });
+
+    // Waiting for Uniqlo to insert the price element fr-ec-price
+    await page.waitForSelector('.fr-ec-price', { timeout: 15000 });
+
+    const content = await page.content();
+
+    const match = content.match(/aria-label="price is \$(\d{1,3}\.\d{2})"/); // RegEx to find the price
+
+    if (!match) {
+      console.log("Price not found in content");
+      return null;
     }
+
+    const price = parseFloat(match[1]);
+    console.log(price);
+
+    await page.close();
+    return price;
+
+  } catch (error) {
+    console.log("Error getting the price", error);
+  }
 }
 
 priceFind("https://www.uniqlo.com/us/en/products/E478286-000/00?colorDisplayCode=69")
