@@ -1,6 +1,8 @@
 require("dotenv").config();
 const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer')
+const {connectDB, getItemsCollection} = require('./db');
+
 
 let browser;
 // Allow the browser to be reused
@@ -18,6 +20,7 @@ async function getBrowser() {
   return browser;
 }
 
+// Finds the price of the item
 async function priceFind(url) {
   try {
     const browser = await getBrowser();
@@ -29,7 +32,6 @@ async function priceFind(url) {
     await page.waitForSelector('.fr-ec-price', { timeout: 15000 });
 
     const content = await page.content();
-
     const match = content.match(/aria-label="price is \$(\d{1,3}\.\d{2})"/); // RegEx to find the price
 
     if (!match) {
@@ -38,7 +40,7 @@ async function priceFind(url) {
     }
 
     const price = parseFloat(match[1]);
-    console.log(price);
+    console.log(price, url);
 
     await page.close();
     return price;
@@ -48,12 +50,31 @@ async function priceFind(url) {
   }
 }
 
-priceFind("https://www.uniqlo.com/us/en/products/E478286-000/00?colorDisplayCode=69")
-
 // Shuts down the browser
 process.on('exit', async () => { if (browser) await browser.close(); });
 process.on('SIGINT', async () => { if (browser) await browser.close(); });
 process.on('SIGTERM', async () => { if (browser) await browser.close(); });
+
+async function dbPriceUpdate(){
+  const itemsCollection = await getItemsCollection();
+  const items = await itemsCollection.find({}, {projection: { link: 1, price: 1}}).toArray(); // Grabs all the link and price
+
+  for (const item of items) {
+    const { _id, link, price: oldPrice } = item;
+
+    const newPrice = await priceFind(link);
+
+    // If scraping fails, move onto next
+    if (newPrice === null) continue;
+
+    // Updates old price if new price is found
+    if (newPrice !== oldPrice) {
+      await itemsCollection.updateOne({ _id },{ $set: { price: newPrice } });
+      console.log(`Updated price for ${link}: ${oldPrice} → ${newPrice}`);
+    }
+  }
+  console.log("Finished running")
+}
 
 async function sendEmail(){
     const transporter = nodemailer.createTransport({
@@ -78,5 +99,5 @@ async function sendEmail(){
 async function runEmail(){
      await sendEmail()
 }
- 
+
 module.exports = {priceFind}

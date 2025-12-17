@@ -15,4 +15,9 @@ async function connectDB(){
     }
 }
 
-module.exports = {connectDB}
+const getItemsCollection = async () => {
+    const db = await connectDB();
+    return db.collection("items");
+};
+
+module.exports = {connectDB, getItemsCollection}

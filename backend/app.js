@@ -14,7 +14,7 @@ app.use(express.json()); // Parse incoming json body
 app.post("/", async (req, res) =>{
     const email = req.body.email; // Grabs the email value from the form
     const link = req.body.itemLink; // Grabs the link value from the form
-    const price = await priceFind(link) // Right now, because of the value cannot be fetch, try to put in some arbitary value instead
+    const price = await priceFind(link)
 
     // Issue: When submitting to delete email, it creates a new document in DB with no price, link, price. 
     try{
@@ -55,3 +55,5 @@ app.get("/", (req, res) =>{
 })
 
 app.listen(3000);
+
+module.exports = {itemsCollection}
