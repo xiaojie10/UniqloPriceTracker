@@ -40,7 +40,6 @@ async function priceFind(url) {
     }
 
     const price = parseFloat(match[1]);
-    console.log(price, url);
 
     await page.close();
     return price;
@@ -57,26 +56,33 @@ process.on('SIGTERM', async () => { if (browser) await browser.close(); });
 
 async function dbPriceUpdate(){
   const itemsCollection = await getItemsCollection();
-  const items = await itemsCollection.find({}, {projection: { link: 1, price: 1}}).toArray(); // Grabs all the link and price
+  const items = await itemsCollection.find({}, {projection: { link: 1, price: 1, watchers: 1}}).toArray(); // Grabs all the link and price
 
   for (const item of items) {
-    const { _id, link, price: oldPrice } = item;
+    const { _id, link, price: oldPrice, watchers } = item;
 
     const newPrice = await priceFind(link);
+    if (newPrice === null) continue; // If scraping fails, move onto next
 
-    // If scraping fails, move onto next
-    if (newPrice === null) continue;
-
-    // Updates old price if new price is found
-    if (newPrice !== oldPrice) {
+    // Setting the price from null
+    if (oldPrice == null) {
       await itemsCollection.updateOne({ _id },{ $set: { price: newPrice } });
-      console.log(`Updated price for ${link}: ${oldPrice} → ${newPrice}`);
+      console.log(`Setting price for ${link}: ${oldPrice} -> ${newPrice}`);
+      continue // Since price was null, no need to compare it with newPrice
+    }
+
+    // If price is dropped, call sendEmail() and send an email to the watchers notifying them about the price drop
+    if (oldPrice > newPrice){
+      await itemsCollection.updateOne({ _id },{ $set: { price: newPrice } });
+      console.log(`Price dropped for ${link}: ${oldPrice} -> ${newPrice}`);
+      sendEmail(link, watchers, oldPrice, newPrice)
     }
   }
+
   console.log("Finished running")
 }
 
-async function sendEmail(){
+async function sendEmail(link, email, oldPrice, newPrice){
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
     port: 465,
@@ -88,9 +94,10 @@ async function sendEmail(){
 })
     const info = await transporter.sendMail({
         from: "pricenotify30@gmail.com",
-        to: "xiaoli5253@yahoo.com",
-        subject: "Price update!",
-        text: "New message "
+        to: email,
+        subject: "Your Uniqlo item price has dropped!",
+        text: `The item from your watch list has drops its price from ${oldPrice} to ${newPrice}!
+        View item: ${link}`
     })
 
     console.log("Message sent: %s", info.messageId);
