@@ -1,7 +1,7 @@
 require("dotenv").config();
 const puppeteer = require('puppeteer');
 const nodemailer = require('nodemailer')
-const {connectDB, getItemsCollection} = require('./db');
+const {getItemsCollection} = require('./db');
 
 
 let browser;
@@ -101,10 +101,6 @@ async function sendEmail(link, email, oldPrice, newPrice){
     })
 
     console.log("Message sent: %s", info.messageId);
-}
-
-async function runEmail(){
-     await sendEmail()
 }
 
 module.exports = {priceFind}
