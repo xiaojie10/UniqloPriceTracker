@@ -1,7 +1,6 @@
 require("dotenv").config();
 const express = require('express');
 const app = express();
-const {priceFind} = require("./main") // Import the priceFind function from main.js
 const {connectDB} = require('./db');
 
 app.set('view engine', 'ejs')
@@ -14,7 +13,6 @@ app.use(express.json()); // Parse incoming json body
 app.post("/", async (req, res) =>{
     const email = req.body.email; // Grabs the email value from the form
     const link = req.body.itemLink; // Grabs the link value from the form
-    const price = await priceFind(link)
 
     // Issue: When submitting to delete email, it creates a new document in DB with no price, link, price. 
     try{
