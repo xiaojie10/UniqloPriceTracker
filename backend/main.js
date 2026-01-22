@@ -75,7 +75,14 @@ async function dbPriceUpdate(){
     if (oldPrice > newPrice){
       await itemsCollection.updateOne({ _id },{ $set: { price: newPrice } });
       console.log(`Price dropped for ${link}: ${oldPrice} -> ${newPrice}`);
-      sendEmail(link, watchers, oldPrice, newPrice)
+
+      // If there are a watcher exist for an item, sends the email, if not, skip it
+      if(watchers && watchers.length> 0 ){
+        await sendEmail(link, watchers, oldPrice, newPrice)
+      } else{
+        console.log(`No watchers for ${link}, skipping email`)
+      }
+      
     }
   }
 

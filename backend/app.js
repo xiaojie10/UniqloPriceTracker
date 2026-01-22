@@ -20,6 +20,9 @@ app.post("/", async (req, res) =>{
         // Delete email from DB
         if(emailDelete){
             await itemsCollection.updateMany({}, {$pull: {watchers: emailDelete}})
+
+            await itemsCollection.deleteMany({watchers: { $size: 0 }}) // Delete items with no watchers
+
             return res.render("website")
         }
 
