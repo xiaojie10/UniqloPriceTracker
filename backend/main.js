@@ -56,6 +56,7 @@ process.on('SIGTERM', async () => { if (browser) await browser.close(); });
 
 async function dbPriceUpdate(){
   const itemsCollection = await getItemsCollection();
+  await itemsCollection.deleteMany({watchers: { $size: 0 }}) // Cleaning up items with no watchers
   const items = await itemsCollection.find({}, {projection: { link: 1, price: 1, watchers: 1}}).toArray(); // Grabs all the link and price
 
   for (const item of items) {
