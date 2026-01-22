@@ -20,13 +20,14 @@
             <form action = "/", method = "POST"> 
                 <input type = "text" id = "email" name = "email" placeholder="Enter your email">
                 <input type = "text" id = "itemLink" name = "itemLink" placeholder = "Enter the item link">
-                <input type = "submit" value = "Submit Link">
+                <input type = "submit" value = "Submit Item">
             </form>
         </div>
         <div class = "removeEmail">
             <p style = "font-size: 15px; font-family:Arial, Helvetica, sans-serif; color:222222;">If you wish to remove your email from the database, enter your email below </p>
             <input type = "text" id = "removeEmail" placeholder = "Enter your email" >
             <button type = "button" id = "removeEmailButton" onclick= "deleteEmail()">Enter</button>
+            <p id="statusMessage"></p>
         </div>
         </div>
         <script src="/client.js"></script>
