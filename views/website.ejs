@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Uniqlo Price Tracker</title>
         <link rel = "stylesheet" href = "main.css">
     </head>
     <script>
@@ -11,25 +10,36 @@
     }
     </script>
     <body>
-        <div class = "heading">
-        <img id = "logo" src = "uniqloLogo.png">
-        <h1>Uniqlo Price Tracker</h1>            
-        </div>
-        <div id = productLink>
-            <%# Sends a post request to the home page upon pressing the submit link button %> 
-            <form action = "/", method = "POST"> 
-                <input type = "text" id = "email" name = "email" placeholder="Enter your email">
-                <input type = "text" id = "itemLink" name = "itemLink" placeholder = "Enter the item link">
-                <input type = "submit" value = "Submit Item">
+<header class="hero">
+    <div class="hero-content">
+        <div class="hero-left">
+            <h1>Never Miss a Uniqlo Deal Again</h1>
+            <p>
+                Track any Uniqlo item and get instant email alerts when the price drops.
+            </p>
+            <form action="/" method="POST" class="tracker-form" id="trackingForm">
+                <input type="text" id="email" name="email" placeholder="Enter your email" required>
+                <input type="text" id="itemLink" name="itemLink" placeholder="Enter the item link" required>
+                <button type="submit">Start Tracking</button>
             </form>
+            <p id="trackingMessage" class="success-message"></p>
+            <div class="removeEmail">
+                <p class="removeEmailText">Want to stop tracking? Enter your email below!</p>
+                <input type="text" id="removeEmail" placeholder="Enter your email">
+                <button type="button" onclick="deleteEmail()">Enter</button>
+                <p id="statusMessage"></p>
+            </div>
         </div>
-        <div class = "removeEmail">
-            <p style = "font-size: 15px; font-family:Arial, Helvetica, sans-serif; color:222222;">If you wish to remove your email from the database, enter your email below </p>
-            <input type = "text" id = "removeEmail" placeholder = "Enter your email" >
-            <button type = "button" id = "removeEmailButton" onclick= "deleteEmail()">Enter</button>
-            <p id="statusMessage"></p>
+        <div class="hero-right">
+            <img src="/pricedropped.png">
         </div>
-        </div>
+    </div>
+</header>
+    <section class="how-it-works">
+        <h2>How It Works</h2>
+        <img src="/howitworks.png" alt="How It Works Illustration">
+    </section>
+    <hr class="section-divider">
         <script src="/client.js"></script>
     </body>
 </html> 

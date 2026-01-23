@@ -1,33 +1,227 @@
-#logo{
-    width: 50px;
-    border-radius: 10px;
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f8f9fa;
+    color: #333;
 }
 
-.heading{
+.hero {
+    background: #f1f0f0;
+    padding: 3rem 1rem;
+}
+
+.hero-content {
+    max-width: 1100px;
+    margin: 0 auto;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    gap: 40px;
+}
+
+.hero-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.hero h1 {
+    font-size: 2.2rem;
+    margin: 0;
+    text-align: left;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    color: #555;
+    margin: 0;
+    max-width: 520px;
+    text-align: left;
+}
+
+.hero-left .tracker-form {
+    padding: 0;
+    max-width: 520px;
+}
+
+.hero-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center; 
 }
 
 
-h1{
-    font-family:Arial, Helvetica, sans-serif;
-    font-weight:normal;
-    color:222222;
-    font-size:35px;
+.hero-right img {
+    width: 520px;
+    max-width: 100%;
+    height: auto;
+    display: block;
 }
-
-
 
 #productLink {
-    text-align: center;
-    font-family:Arial, Helvetica, sans-serif;
-    font-weight:normal;
-    color:222222;
-    font-size:35px;
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
 }
 
-.removeEmail{
-    text-align: center;
+.tracker-form {
+  display: flex;
+  flex-direction: column; 
+  gap: 12px;              
+  max-width: 720px;
+  width: 100%;
+  padding: 16px;
 }
 
+.tracker-form input {
+  flex: 1;
+  padding: 14px 16px;
+  font-size: 15px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tracker-form input:focus {
+  border-color: #000;
+  box-shadow: 0 0 0 1px #000;
+}
+
+.tracker-form button {
+  background-color: #e60012;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px 22px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.tracker-form button:hover {
+  background-color: #c50010;
+}
+
+.tracker-form button:active {
+  transform: translateY(1px);
+}
+
+.how-it-works {
+    max-width: 900px;
+    margin: 60px auto; 
+    text-align: center;
+    padding: 0 20px;
+}
+
+.how-it-works h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.how-it-works img {
+    width: 100%;
+    max-width: 850px; 
+    height: auto;
+    display: block;
+    margin: 0 auto; 
+}
+
+.section-divider {
+    border: none;
+    height: 1px;
+    background-color: #ddd; 
+    margin: 60px 0; 
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .hero-left {
+    align-items: center;
+  }
+
+  .hero h1,
+  .hero p {
+    text-align: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .tracker-form {
+    flex-direction: column;
+  }
+
+  .tracker-form button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+    .removeEmail-row {
+        flex-direction: column;
+    }
+
+    .removeEmail button {
+        width: 100%;
+    }
+}
+
+.removeEmail {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #ddd;
+    max-width: 520px;
+}
+
+.removeEmail p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.removeEmail-row {
+    display: flex;
+    gap: 10px;
+}
+
+.removeEmail input {
+    width: 420px;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    outline: none;
+}
+
+
+.removeEmail input:focus {
+    border-color: #000;
+    box-shadow: 0 0 0 1px #000;
+}
+
+.removeEmail button {
+    background: #666;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 12px 16px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.removeEmail button:hover {
+    background: #444;
+}
+
+#statusMessage {
+    margin-top: 12px;
+    font-size: 13px;
+    color: #2e7d32;
+}
