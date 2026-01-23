@@ -90,6 +90,8 @@ async function dbPriceUpdate(){
   console.log("Finished running")
 }
 
+dbPriceUpdate()
+
 async function sendEmail(link, email, oldPrice, newPrice){
     const transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
