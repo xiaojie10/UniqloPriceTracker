@@ -17,15 +17,35 @@
             <p>
                 Track any Uniqlo item and get instant email alerts when the price drops.
             </p>
-            <form action="/" method="POST" class="tracker-form" id="trackingForm">
+            <form action="/" method="POST" class="tracker-form">
+        <% if (typeof error !== "undefined") { %>
+            <p id="errorMessage" class="error-message"><%= error %></p>
+
+            <script>
+                setTimeout(() => {
+                    const el = document.getElementById("errorMessage")
+                    if (el) el.remove()
+                }, 3000);
+            </script>
+        <% } %>
+
+        <% if (typeof success !== "undefined") { %>
+        <p id="successMessage" class="success-message"><%= success %></p>
+        <script>
+            setTimeout(() => {
+                const el = document.getElementById("successMessage");
+                if (el) el.remove()
+            }, 3000);
+        </script>
+        <% } %>
+        
                 <input type="text" id="email" name="email" placeholder="Enter your email" required>
                 <input type="text" id="itemLink" name="itemLink" placeholder="Enter the item link" required>
                 <button type="submit">Start Tracking</button>
             </form>
-            <p id="trackingMessage" class="success-message"></p>
             <div class="removeEmail">
                 <p class="removeEmailText">Want to stop tracking? Enter your email below!</p>
-                <input type="text" id="removeEmail" placeholder="Enter your email">
+                <input type="email" id="removeEmail" placeholder="Enter your email">
                 <button type="button" onclick="deleteEmail()">Enter</button>
                 <p id="statusMessage"></p>
             </div>

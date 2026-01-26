@@ -220,6 +220,25 @@ body {
     background: #444;
 }
 
+.error-message {
+    color: #e63946;
+    background-color: #ffecec;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.success-message {
+    color: #2a9d8f;
+    background-color: #e6f8f3;
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+
 #statusMessage {
     margin-top: 12px;
     font-size: 13px;

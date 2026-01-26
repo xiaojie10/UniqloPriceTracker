@@ -9,6 +9,24 @@ app.use(express.static("public")); // Allow the browser to access any public fil
 app.use(express.urlencoded({extended: true})); // For handling form submission
 app.use(express.json()); // Parse incoming json body
 
+// Validate Uniqlo product link
+function isValidUniqloLink(link) {
+    try {
+        const url = new URL(link)
+
+        return (
+            url.hostname.includes("uniqlo.com") && url.pathname.includes("/products/"))
+    } catch {
+        return false
+    }
+}
+
+// Normalize Uniqlo link (remove query params)
+function normalizeUniqloLink(link) {
+    const url = new URL(link)
+    return `${url.origin}${url.pathname}`
+}
+
 // Handles all POST request sent to "/"
 app.post("/", async (req, res) =>{
     try{
@@ -24,7 +42,13 @@ app.post("/", async (req, res) =>{
         }
 
         const email = req.body.email; // Grabs the email value from the form
-        const link = req.body.itemLink; // Grabs the link value from the form
+        const rawLink = req.body.itemLink; // Grabs the link value from the form
+
+        if (!isValidUniqloLink(rawLink)) {
+            return res.render("website", {error:"Please enter a valid uniqlo link!"})
+        }
+
+        const link = normalizeUniqloLink(rawLink);
 
         // If both email or link is empty, stop it from continue running
         if (!email || !link) {
@@ -50,7 +74,7 @@ app.post("/", async (req, res) =>{
         console.log("An error has occured", error)
     }
 
-    res.render("website") 
+    res.render("website", {success: "Item has successfully added! You'll be notified when the price drops."}) 
 })
 
 app.get("/", (req, res) =>{
