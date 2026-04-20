@@ -10,7 +10,7 @@ Backend: Node.js, Express.js, MongoDB
 Automation: Puppeteer, Nodemailer
 
 ## Server
-Why expres?
+Why express?
 
 Express was used because it's a lightweight and flexible backend framework fits all my needs of a scraping(puppeteer) application as well as easy integration with other tools I'm using such as MongoDB and Nodemailer.
 
